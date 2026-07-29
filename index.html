@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Realty | Government Affairs Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0E1B33;
+  --navy-soft: #16274A;
+  --red: #B3202D;
+  --red-soft: #F5DEDF;
+  --page-bg: #EEF0F3;
+  --card: #FFFFFF;
+  --card-alt: #F5F6F8;
+  --ink: #1A1F29;
+  --slate: #6B7280;
+  --rule: #E2E4E9;
+
+  --status-introduced: #4B5563;
+  --status-introduced-bg: #E9EAEC;
+  --status-committee: #92620A;
+  --status-committee-bg: #FBEED9;
+  --status-floor: #1D4ED8;
+  --status-floor-bg: #E1E9FB;
+  --status-enacted: #1E6B3A;
+  --status-enacted-bg: #DFEFE3;
+  --status-stalled: #B3202D;
+  --status-stalled-bg: #F5DEDF;
+
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--page-bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Masthead ---------- */
+
+.masthead {
+  background: var(--navy);
+  color: #fff;
+}
+
+.masthead-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 20px 28px 16px;
+}
+
+.masthead-inner h1 {
+  font-size: 19px;
+  font-weight: 700;
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+}
+
+.masthead-updated {
+  margin: 0;
+  font-size: 12px;
+  font-family: var(--mono);
+  color: #9AA3B8;
+  letter-spacing: 0.02em;
+}
+
+.brand-rule {
+  height: 4px;
+  background: var(--red);
+}
+
+/* ---------- Tabs ---------- */
+
+.tabs {
+  background: var(--navy-soft);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.tabs-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 28px;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+}
+
+.tab-btn {
+  appearance: none;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 15px 16px;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #A9B2C6;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.tab-btn:hover { color: #fff; }
+
+.tab-btn.is-active {
+  color: #fff;
+  border-bottom-color: var(--red);
+}
+
+/* ---------- Content ---------- */
+
+.content {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 32px 28px 80px;
+}
+
+.panel { display: none; }
+.panel.is-active { display: block; }
+
+.panel-head {
+  margin-bottom: 24px;
+}
+
+.panel-head h2 {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0 0 4px;
+  color: var(--navy);
+}
+
+.panel-desc {
+  margin: 0;
+  color: var(--slate);
+  font-size: 13.5px;
+}
+
+.empty-state {
+  color: var(--slate);
+  font-size: 14px;
+  font-style: italic;
+  padding: 24px 0;
+}
+
+/* ---------- Stats row ---------- */
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: var(--card);
+  padding: 16px 20px;
+  border-top: 3px solid var(--red);
+}
+
+.stat-label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--slate);
+  margin-bottom: 6px;
+}
+
+.stat-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1;
+}
+
+.stat-value.stat-red { color: var(--red); }
+
+/* ---------- Legislation cards ---------- */
+
+.stack { display: flex; flex-direction: column; gap: 12px; }
+
+.bill-card {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 18px 20px;
+  box-shadow: 0 1px 2px rgba(14, 27, 51, 0.04);
+}
+
+.bill-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.bill-number {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--slate);
+  letter-spacing: 0.03em;
+  margin-bottom: 4px;
+}
+
+.bill-title {
+  font-size: 16.5px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--navy);
+}
+
+.bill-sponsor {
+  font-size: 13px;
+  color: var(--slate);
+  margin-top: 4px;
+}
+
+.status-badge {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.status-introduced { color: var(--status-introduced); background: var(--status-introduced-bg); }
+.status-committee { color: var(--status-committee); background: var(--status-committee-bg); }
+.status-floor { color: var(--status-floor); background: var(--status-floor-bg); }
+.status-enacted { color: var(--status-enacted); background: var(--status-enacted-bg); }
+.status-stalled { color: var(--status-stalled); background: var(--status-stalled-bg); }
+
+.bill-summary { font-size: 14px; margin: 10px 0; color: var(--ink); }
+
+.bill-relevance {
+  font-size: 13.5px;
+  background: var(--card-alt);
+  border-radius: 4px;
+  padding: 10px 14px;
+  margin: 10px 0;
+  border-left: 3px solid var(--red);
+}
+
+.bill-relevance-label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--red);
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.bill-meta {
+  font-size: 12.5px;
+  color: var(--slate);
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--rule);
+}
+
+/* ---------- Meetings table ---------- */
+
+.table-wrap {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  overflow-x: auto;
+  box-shadow: 0 1px 2px rgba(14, 27, 51, 0.04);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  min-width: 720px;
+}
+
+.data-table th {
+  text-align: left;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--slate);
+  background: var(--card-alt);
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.data-table td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+  color: var(--ink);
+}
+
+.data-table tr:last-child td { border-bottom: none; }
+
+.data-table td.date-cell {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  white-space: nowrap;
+  color: var(--navy);
+  font-weight: 600;
+}
+
+/* ---------- Contacts ---------- */
+
+.contacts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+
+.contacts-col-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--red);
+  font-weight: 600;
+  margin: 0 0 12px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--navy);
+}
+
+.contact-card {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 14px 18px;
+  box-shadow: 0 1px 2px rgba(14, 27, 51, 0.04);
+}
+
+.contact-name {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--navy);
+}
+
+.contact-title {
+  font-size: 12.5px;
+  color: var(--slate);
+  margin: 2px 0 8px;
+}
+
+.contact-line {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--ink);
+}
+
+/* ---------- Strategy ---------- */
+
+.strategy-block {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 20px 22px;
+  margin-bottom: 14px;
+  box-shadow: 0 1px 2px rgba(14, 27, 51, 0.04);
+}
+
+.strategy-block h3 {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 10px;
+  color: var(--navy);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.strategy-block ul { margin: 0; padding-left: 18px; }
+.strategy-block li { margin-bottom: 6px; font-size: 14px; }
+
+.key-date-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 14px;
+}
+.key-date-row:last-child { border-bottom: none; }
+.key-date-row .kd-date {
+  font-family: var(--mono);
+  color: var(--red);
+  font-weight: 600;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 640px) {
+  .masthead-inner h1 { font-size: 16px; }
+  .contacts-grid { grid-template-columns: 1fr; gap: 20px; }
+  .bill-card-top { flex-direction: column; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <h1>Invariant &middot; Digital Realty &middot; 2026</h1>
+    <p class="masthead-updated">Last Updated: <span id="last-updated"></span></p>
+  </div>
+</header>
+<div class="brand-rule" aria-hidden="true"></div>
+
+<nav class="tabs" aria-label="Dashboard sections">
+  <div class="tabs-inner">
+    <button class="tab-btn is-active" data-tab="legislation">Legislation</button>
+    <button class="tab-btn" data-tab="meetings">Meetings</button>
+    <button class="tab-btn" data-tab="contacts">Points of Contact</button>
+    <button class="tab-btn" data-tab="strategy">Engagement Strategy</button>
+  </div>
+</nav>
+
+<main class="content">
+
+  <!-- LEGISLATION -->
+  <section id="legislation" class="panel is-active">
+    <div class="panel-head">
+      <h2>Legislation Tracker</h2>
+      <p class="panel-desc">Bills relevant to Digital Realty's federal policy priorities.</p>
+    </div>
+    <div id="legislation-stats" class="stats-row"></div>
+    <div id="legislation-list" class="stack"></div>
+  </section>
+
+  <!-- MEETINGS -->
+  <section id="meetings" class="panel">
+    <div class="panel-head">
+      <h2>Meeting Tracker</h2>
+      <p class="panel-desc">Government meetings held on behalf of Digital Realty.</p>
+    </div>
+    <div id="meetings-stats" class="stats-row"></div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Office</th>
+            <th>Invariant</th>
+            <th>Digital Realty</th>
+            <th>Topic</th>
+            <th>Follow-up</th>
+          </tr>
+        </thead>
+        <tbody id="meetings-list"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- CONTACTS -->
+  <section id="contacts" class="panel">
+    <div class="panel-head">
+      <h2>Points of Contact</h2>
+      <p class="panel-desc">Core team on both sides of the engagement.</p>
+    </div>
+    <div class="contacts-grid">
+      <div class="contacts-col">
+        <h3 class="contacts-col-label">Invariant</h3>
+        <div id="contacts-inv" class="stack"></div>
+      </div>
+      <div class="contacts-col">
+        <h3 class="contacts-col-label">Digital Realty</h3>
+        <div id="contacts-dr" class="stack"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STRATEGY -->
+  <section id="strategy" class="panel">
+    <div class="panel-head">
+      <h2>Engagement Strategy</h2>
+      <p class="panel-desc">Populated once strategy for the engagement is finalized.</p>
+    </div>
+    <div id="strategy-content"></div>
+  </section>
+
+</main>
+
+<script>
+/* ============================================================
+   DIGITAL REALTY DASHBOARD — DATA FILE
+   ------------------------------------------------------------
+   This is the only file you need to edit to update the site.
+   Edit the values between the quotes, keep the commas and
+   brackets exactly where they are, then commit + push to GitHub.
+   Refresh the page (hard refresh: Cmd+Shift+R) to see changes.
+   ============================================================ */
+
+const DASHBOARD_DATA = {
+
+  // Shown in the masthead under the client name
+  lastUpdated: "July 29, 2026",
+
+  /* ----------------------------------------------------------
+     1. LEGISLATION
+     status must be exactly one of:
+       "introduced", "committee", "floor", "enacted", "stalled"
+  ---------------------------------------------------------- */
+  legislation: [
+    {
+      bill: "S. 5054",
+      title: "Data Center Tax Accountability and Disclosure Act of 2026",
+      sponsor: "Sen. Mark Warner (D-VA)",
+      status: "committee",
+      chamber: "Senate",
+      summary: "Would exempt AI data centers from bonus depreciation and require data center operators to disclose information relating to their electricity and water use.",
+      lastAction: "Read twice and referred to the Senate Committee on Finance",
+      lastActionDate: "July 21, 2026"
+    }
+  ],
+
+  /* ----------------------------------------------------------
+     2. MEETINGS
+     Add new meetings to the TOP of the list (most recent first)
+  ---------------------------------------------------------- */
+  meetings: [
+    // Add meetings here as they happen, most recent first. Example:
+    // {
+    //   date: "2026-07-15",
+    //   office: "Office of Sen. Mark Warner",
+    //   attendeesINV: "Ben Wiener",
+    //   attendeesDR: "Kevin Gundersen",
+    //   topic: "Discussed S. 5054 and data center tax treatment",
+    //   followUp: "Send one-pager on bonus depreciation impact"
+    // }
+  ],
+
+  /* ----------------------------------------------------------
+     3. POINTS OF CONTACT
+  ---------------------------------------------------------- */
+  contactsInvariant: [
+    { name: "Carolyn Coda", title: "Senior Vice President", email: "coda@weareinvariant.com", phone: "(571) 213-9189" },
+    { name: "Ryan Dilworth", title: "Senior Director", email: "dilworth@weareinvariant.com", phone: "(267) 221-7482" },
+    { name: "Peter Wells", title: "Senior Advisor", email: "wells@weareinvariant.com", phone: "(774) 452-0588" },
+    { name: "Ben Wiener", title: "Associate", email: "wiener@weareinvariant.com", phone: "(202) 322-9949" }
+  ],
+
+  contactsClient: [
+    { name: "Kevin Gundersen", title: "Head of Public Affairs", email: "kgundersen@digitalrealty.com", phone: "" },
+    { name: "Joe Bertucci", title: "Senior Vice President, Global Head of Tax", email: "jbertucci@digitalrealty.com", phone: "" }
+  ],
+
+  /* ----------------------------------------------------------
+     4. ENGAGEMENT STRATEGY
+     Leave sections blank ("") until strategy is finalized;
+     they will simply not render.
+  ---------------------------------------------------------- */
+  strategy: {
+    overview: "",
+    priorities: [
+      // "First priority",
+      // "Second priority"
+    ],
+    keyDates: [
+      // { label: "DC fly-in", date: "Early September 2026" }
+    ]
+  }
+
+};
+
+</script>
+<script>
+// ============================================================
+// DIGITAL REALTY DASHBOARD — RENDER LOGIC
+// You should not need to edit this file. Edit data.js instead.
+// ============================================================
+
+const STATUS_LABELS = {
+  introduced: "Introduced",
+  committee: "In Committee",
+  floor: "Floor Action",
+  enacted: "Enacted",
+  stalled: "Stalled"
+};
+
+function esc(str) {
+  if (!str) return "";
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function formatDate(iso) {
+  const d = new Date(iso + "T00:00:00");
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
+// ---------- Legislation ----------
+
+function renderLegislationStats() {
+  const container = document.getElementById("legislation-stats");
+  const items = DASHBOARD_DATA.legislation || [];
+  const counts = { introduced: 0, committee: 0, floor: 0, enacted: 0, stalled: 0 };
+  items.forEach(b => { if (counts[b.status] !== undefined) counts[b.status]++; });
+
+  container.innerHTML = `
+    <div class="stat-card">
+      <div class="stat-label">Total Tracked</div>
+      <div class="stat-value">${items.length}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Introduced</div>
+      <div class="stat-value">${counts.introduced}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">In Committee</div>
+      <div class="stat-value">${counts.committee}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Floor Action</div>
+      <div class="stat-value">${counts.floor}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Enacted</div>
+      <div class="stat-value stat-red">${counts.enacted}</div>
+    </div>
+  `;
+}
+
+function renderLegislation() {
+  const container = document.getElementById("legislation-list");
+  const items = DASHBOARD_DATA.legislation || [];
+
+  if (items.length === 0) {
+    container.innerHTML = '<p class="empty-state">No legislation currently tracked.</p>';
+    return;
+  }
+
+  container.innerHTML = items.map(bill => `
+    <div class="bill-card">
+      <div class="bill-card-top">
+        <div>
+          <div class="bill-number">${esc(bill.bill)} &middot; ${esc(bill.chamber)}</div>
+          <h3 class="bill-title">${esc(bill.title)}</h3>
+          <div class="bill-sponsor">${esc(bill.sponsor)}</div>
+        </div>
+        <span class="status-badge status-${esc(bill.status)}">${esc(STATUS_LABELS[bill.status] || bill.status)}</span>
+      </div>
+      ${bill.summary ? `<p class="bill-summary">${esc(bill.summary)}</p>` : ""}
+      ${bill.lastAction ? `
+        <div class="bill-meta">${esc(bill.lastAction)}${bill.lastActionDate ? " &middot; " + esc(bill.lastActionDate) : ""}</div>
+      ` : ""}
+    </div>
+  `).join("");
+}
+
+// ---------- Meetings ----------
+
+function renderMeetingsStats() {
+  const container = document.getElementById("meetings-stats");
+  const items = DASHBOARD_DATA.meetings || [];
+  const thisYear = new Date().getFullYear();
+  const ytd = items.filter(m => new Date(m.date + "T00:00:00").getFullYear() === thisYear).length;
+  const uniqueOffices = new Set(items.map(m => m.office)).size;
+
+  container.innerHTML = `
+    <div class="stat-card">
+      <div class="stat-label">Total Meetings</div>
+      <div class="stat-value">${items.length}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">YTD ${thisYear}</div>
+      <div class="stat-value">${ytd}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Offices Engaged</div>
+      <div class="stat-value stat-red">${uniqueOffices}</div>
+    </div>
+  `;
+}
+
+function renderMeetings() {
+  const container = document.getElementById("meetings-list");
+  const items = DASHBOARD_DATA.meetings || [];
+
+  if (items.length === 0) {
+    container.innerHTML = '<tr><td colspan="6" class="empty-state">No meetings logged yet.</td></tr>';
+    return;
+  }
+
+  container.innerHTML = items.map(m => `
+    <tr>
+      <td class="date-cell">${esc(formatDate(m.date))}</td>
+      <td>${esc(m.office)}</td>
+      <td>${esc(m.attendeesINV)}</td>
+      <td>${esc(m.attendeesDR)}</td>
+      <td>${esc(m.topic)}</td>
+      <td>${esc(m.followUp)}</td>
+    </tr>
+  `).join("");
+}
+
+// ---------- Contacts ----------
+
+function renderContactCard(c) {
+  return `
+    <div class="contact-card">
+      <div class="contact-name">${esc(c.name)}</div>
+      ${c.title ? `<div class="contact-title">${esc(c.title)}</div>` : ""}
+      ${c.email ? `<div class="contact-line">${esc(c.email)}</div>` : ""}
+      ${c.phone ? `<div class="contact-line">${esc(c.phone)}</div>` : ""}
+    </div>
+  `;
+}
+
+function renderContacts() {
+  const inv = document.getElementById("contacts-inv");
+  const dr = document.getElementById("contacts-dr");
+
+  const invItems = DASHBOARD_DATA.contactsInvariant || [];
+  const drItems = DASHBOARD_DATA.contactsClient || [];
+
+  inv.innerHTML = invItems.length
+    ? invItems.map(renderContactCard).join("")
+    : '<p class="empty-state">No contacts listed.</p>';
+
+  dr.innerHTML = drItems.length
+    ? drItems.map(renderContactCard).join("")
+    : '<p class="empty-state">No contacts listed.</p>';
+}
+
+// ---------- Strategy ----------
+
+function renderStrategy() {
+  const container = document.getElementById("strategy-content");
+  const s = DASHBOARD_DATA.strategy || {};
+  const blocks = [];
+
+  if (s.overview) {
+    blocks.push(`
+      <div class="strategy-block">
+        <h3>Overview</h3>
+        <p>${esc(s.overview)}</p>
+      </div>
+    `);
+  }
+
+  if (s.priorities && s.priorities.length) {
+    blocks.push(`
+      <div class="strategy-block">
+        <h3>Priorities</h3>
+        <ul>${s.priorities.map(p => `<li>${esc(p)}</li>`).join("")}</ul>
+      </div>
+    `);
+  }
+
+  if (s.keyDates && s.keyDates.length) {
+    blocks.push(`
+      <div class="strategy-block">
+        <h3>Key Dates</h3>
+        ${s.keyDates.map(kd => `
+          <div class="key-date-row">
+            <span>${esc(kd.label)}</span>
+            <span class="kd-date">${esc(kd.date)}</span>
+          </div>
+        `).join("")}
+      </div>
+    `);
+  }
+
+  container.innerHTML = blocks.length
+    ? blocks.join("")
+    : '<p class="empty-state">Engagement strategy has not been finalized yet. This section will populate once it is.</p>';
+}
+
+// ---------- Tabs ----------
+
+function initTabs() {
+  const buttons = document.querySelectorAll(".tab-btn");
+  const panels = document.querySelectorAll(".panel");
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const target = btn.dataset.tab;
+      buttons.forEach(b => b.classList.toggle("is-active", b === btn));
+      panels.forEach(p => p.classList.toggle("is-active", p.id === target));
+      try {
+        history.replaceState(null, "", "#" + target);
+      } catch (e) {
+        // Some sandboxed/preview environments block history updates; safe to ignore.
+      }
+    });
+  });
+
+  try {
+    const hash = window.location.hash.replace("#", "");
+    if (hash) {
+      const match = document.querySelector(`.tab-btn[data-tab="${hash}"]`);
+      if (match) match.click();
+    }
+  } catch (e) {
+    // Ignore in restricted environments.
+  }
+}
+
+// ---------- Init ----------
+
+document.getElementById("last-updated").textContent = DASHBOARD_DATA.lastUpdated || "";
+renderLegislationStats();
+renderLegislation();
+renderMeetingsStats();
+renderMeetings();
+renderContacts();
+renderStrategy();
+initTabs();
+
+</script>
+</body>
+</html>
