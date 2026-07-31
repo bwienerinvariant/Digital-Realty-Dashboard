@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Digital Realty Government Affairs Dashboard</title>
+<title>Digital Realty Government Relations Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -392,6 +392,93 @@ body {
 .strategy-block ul { margin: 0; padding-left: 18px; }
 .strategy-block li { margin-bottom: 6px; font-size: 14px; }
 
+.strategy-block p {
+  font-size: 14px;
+  margin: 0 0 10px;
+  color: var(--ink);
+}
+.strategy-block p:last-child { margin-bottom: 0; }
+
+.workstream-list {
+  margin: 12px 0 0;
+  padding-left: 20px;
+}
+.workstream-list li {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+
+.strategy-subhead {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--red);
+  font-weight: 600;
+  margin: 16px 0 8px;
+}
+.strategy-subhead:first-of-type { margin-top: 12px; }
+
+.strategy-note {
+  font-size: 12.5px;
+  color: var(--slate);
+  font-style: italic;
+  margin-top: 14px;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 14px 0;
+}
+
+.category-card {
+  background: var(--card-alt);
+  border-radius: 4px;
+  padding: 14px 16px;
+  border-left: 3px solid var(--navy);
+}
+
+.category-name {
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+
+.category-card p { margin: 0; font-size: 13px; }
+
+.target-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.target-card {
+  background: var(--card-alt);
+  border-radius: 4px;
+  padding: 14px 16px;
+}
+
+.target-group {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--navy);
+  font-weight: 700;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.target-card ul { padding-left: 16px; }
+.target-card li { font-size: 13px; margin-bottom: 5px; }
+
 .key-date-row {
   display: flex;
   justify-content: space-between;
@@ -413,6 +500,8 @@ body {
   .contacts-grid { grid-template-columns: 1fr; gap: 20px; }
   .bill-card-top { flex-direction: column; }
   .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .category-grid { grid-template-columns: 1fr; }
+  .target-grid { grid-template-columns: 1fr; }
 }
 
 </style>
@@ -421,35 +510,24 @@ body {
 
 <header class="masthead">
   <div class="masthead-inner">
-    <h1>Digital Realty Government Affairs Dashboard</h1>
-    <p class="masthead-updated">Last Updated: <span id="last-updated"></span></p>
+    <h1>Digital Realty Government Relations Dashboard</h1>
   </div>
 </header>
 <div class="brand-rule" aria-hidden="true"></div>
 
 <nav class="tabs" aria-label="Dashboard sections">
   <div class="tabs-inner">
-    <button class="tab-btn is-active" data-tab="legislation">Legislation</button>
-    <button class="tab-btn" data-tab="meetings">Meetings</button>
-    <button class="tab-btn" data-tab="contacts">Points of Contact</button>
+    <button class="tab-btn is-active" data-tab="meetings">Meetings</button>
+    <button class="tab-btn" data-tab="legislation">Legislation</button>
     <button class="tab-btn" data-tab="strategy">Engagement Strategy</button>
+    <button class="tab-btn" data-tab="contacts">Points of Contact</button>
   </div>
 </nav>
 
 <main class="content">
 
-  <!-- LEGISLATION -->
-  <section id="legislation" class="panel is-active">
-    <div class="panel-head">
-      <h2>Legislation Tracker</h2>
-      <p class="panel-desc">Bills relevant to Digital Realty's federal policy priorities.</p>
-    </div>
-    <div id="legislation-stats" class="stats-row"></div>
-    <div id="legislation-list" class="stack"></div>
-  </section>
-
   <!-- MEETINGS -->
-  <section id="meetings" class="panel">
+  <section id="meetings" class="panel is-active">
     <div class="panel-head">
       <h2>Meeting Tracker</h2>
       <p class="panel-desc">Government meetings held on behalf of Digital Realty.</p>
@@ -461,15 +539,33 @@ body {
           <tr>
             <th>Date</th>
             <th>Office</th>
-            <th>Invariant</th>
-            <th>Digital Realty</th>
-            <th>Topic</th>
-            <th>Follow-up</th>
+            <th>Chamber</th>
+            <th>Party</th>
+            <th>Staff</th>
+            <th>Emails</th>
           </tr>
         </thead>
         <tbody id="meetings-list"></tbody>
       </table>
     </div>
+  </section>
+
+  <!-- LEGISLATION -->
+  <section id="legislation" class="panel">
+    <div class="panel-head">
+      <h2>Legislation Tracker</h2>
+      <p class="panel-desc">Bills relevant to Digital Realty's federal policy priorities.</p>
+    </div>
+    <div id="legislation-stats" class="stats-row"></div>
+    <div id="legislation-list" class="stack"></div>
+  </section>
+
+  <!-- STRATEGY -->
+  <section id="strategy" class="panel">
+    <div class="panel-head">
+      <h2>Engagement Strategy</h2>
+    </div>
+    <div id="strategy-content"></div>
   </section>
 
   <!-- CONTACTS -->
@@ -488,15 +584,6 @@ body {
         <div id="contacts-dr" class="stack"></div>
       </div>
     </div>
-  </section>
-
-  <!-- STRATEGY -->
-  <section id="strategy" class="panel">
-    <div class="panel-head">
-      <h2>Engagement Strategy</h2>
-      <p class="panel-desc">Populated once strategy for the engagement is finalized.</p>
-    </div>
-    <div id="strategy-content"></div>
   </section>
 
 </main>
@@ -543,10 +630,10 @@ const DASHBOARD_DATA = {
     // {
     //   date: "2026-07-15",
     //   office: "Office of Sen. Mark Warner",
-    //   attendeesINV: "Ben Wiener",
-    //   attendeesDR: "Kevin Gundersen",
-    //   topic: "Discussed S. 5054 and data center tax treatment",
-    //   followUp: "Send one-pager on bonus depreciation impact"
+    //   chamber: "Senate",
+    //   party: "D",
+    //   staff: "Jane Doe, Legislative Assistant",
+    //   emails: "jane.doe@warner.senate.gov"
     // }
   ],
 
@@ -567,17 +654,132 @@ const DASHBOARD_DATA = {
 
   /* ----------------------------------------------------------
      4. ENGAGEMENT STRATEGY
-     Leave sections blank ("") until strategy is finalized;
-     they will simply not render.
+     Leave any field blank ("") or empty ([]) and that block
+     simply will not render.
   ---------------------------------------------------------- */
   strategy: {
-    overview: "",
-    priorities: [
-      // "First priority",
-      // "Second priority"
+
+    memoDate: "July 31, 2026",
+
+    executiveSummary: "Data centers have become one of the most closely watched issues in Washington, driven by the scale of investment behind artificial intelligence (AI) and by growing voter concern over alleged rising electricity costs and environmental impacts. That attention has produced bipartisan scrutiny that extends beyond the hyperscale technology companies most associated with the industry. This document outlines Invariant's strategy to advance Digital Realty's tax priorities and positive reputation as a leader in this environment, built around four workstreams:",
+
+    workstreams: [
+      "Congressional and Administration engagement",
+      "Establishing and communicating a policy narrative",
+      "Developing a coalition and political giving strategy",
+      "An initial Washington fly-in in September"
     ],
+
+    policyLandscape: [
+      "Energy affordability is one of the defining political issues of the year, and data centers are central to the debate. The scale of the AI expansion has put data centers under the bipartisan microscope in Congress. With the midterm elections approaching, data centers will remain at the crux of the policy debate.",
+      "Republicans have so far positioned themselves as wanting to protect ratepayers from the costs of the data centers without imposing heavy regulations on the industry itself. The Trump Administration has secured a Ratepayer Protection Pledge from major technology companies and data center developers, and House Republicans have moved to codify a similar approach through the bipartisan Ratepayer Protection Act. However, public scrutiny of data center operators is growing among some GOP candidates who face reelection this November.",
+      "Democrats are more divided. Some have welcomed data center investment while pushing for new ratepayer and environmental standards, while others are advocating for more extreme measures, including a proposed federal moratorium on new AI data center development."
+    ],
+
+    engagementIntro: "Invariant will lead engagement with Congress and the Administration to advance Digital Realty's tax priorities, focusing on the tax writing committees, relevant Treasury officials, and members representing states where Digital Realty has significant asset concentration. This engagement will be organized around two categories of issues.",
+
+    engagementCategories: [
+      { name: "Digital Realty's Tax Priorities", description: "Invariant will work to build up Digital Realty as the leading voice on these issues. We will work with Digital Realty to finalize the specific priorities, then engage Senate Finance, House Ways and Means, House and Senate leadership, Treasury, the White House, and other relevant staff." },
+      { name: "Broader REIT Industry Tax Issues", description: "Invariant will monitor and track developments on these issues but will not position Digital Realty as the face of these policies." }
+    ],
+
+    engagementTargets: [
+      {
+        group: "House and Senate Leadership",
+        people: [
+          "Senate Majority Leader John Thune (R-SD) + Relevant Staff",
+          "Senate Majority Whip John Barrasso (R-WY) + Relevant Staff",
+          "Speaker Mike Johnson (R-LA)",
+          "House Majority Leader Steve Scalise (R-LA)",
+          "House Majority Whip Tom Emmer (R-MN)",
+          "Senate Minority Leader Chuck Schumer (D-NY)",
+          "Senate Minority Whip Brian Schatz (D-HI)",
+          "House Minority Leader Hakeem Jeffries (D-NY)",
+          "House Minority Whip Katherine Clark (D-MA)"
+        ]
+      },
+      {
+        group: "Senate Finance Committee",
+        people: [
+          "Chairman Mike Crapo (R-ID) + Majority Staff",
+          "Ranking Member Ron Wyden (D-OR) + Minority Staff",
+          "Sen. John Barrasso (R-WY), Chairman, Taxation and IRS Oversight Subcommittee",
+          "Sen. Mark Warner (D-VA)",
+          "Sen. Roger Marshall (R-KS)",
+          "Sen. Raphael Warnock (D-GA)"
+        ]
+      },
+      {
+        group: "House Ways and Means Committee",
+        people: [
+          "Chairman Jason Smith (R-MO) + Majority Staff",
+          "Ranking Member Richard Neal (D-MA) + Minority Staff",
+          "Rep. Mike Kelly (R-PA), Chairman, Tax Subcommittee",
+          "Rep. Darin LaHood (R-IL)",
+          "Rep. Ron Estes (R-KS)",
+          "Rep. Gregory Murphy (R-NC)",
+          "Rep. Beth Van Duyne (R-TX)",
+          "Rep. Nathaniel Moran (R-TX)",
+          "Rep. Brad Schneider (D-IL)",
+          "Rep. Jimmy Panetta (D-CA)",
+          "Rep. Don Beyer (D-VA)"
+        ]
+      },
+      {
+        group: "White House",
+        people: [
+          "Kevin Hassett, Director, National Economic Council",
+          "Jordan Wood, Special Assistant to the President, Office of Public Liaison"
+        ]
+      },
+      {
+        group: "Department of the Treasury",
+        people: [
+          "Kevin Salinger, Acting Assistant Secretary, Office of Tax Policy",
+          "Francis Brooke, Assistant Secretary, Office of Legislative Affairs",
+          "Kyle Perel, Deputy Assistant Secretary for Tax and Budget, Office of Legislative Affairs"
+        ]
+      },
+      {
+        group: "Department of Energy*",
+        people: [
+          "Alex Fitzsimmons, Senior Advisor",
+          "Katie Jereza, Assistant Secretary",
+          "Bryan Kellogg, Principal Deputy Assistant Secretary, Congressional and Intergovernmental Affairs"
+        ]
+      },
+      {
+        group: "Environmental Protection Agency*",
+        people: [
+          "Aaron Szabo, Assistant Administrator",
+          "Alex Dominguez, Deputy Assistant Administrator",
+          "Loan Kim Phan Nguyen, Director, Policy and Legislative Coordination Division"
+        ]
+      }
+    ],
+
+    engagementNote: "*We will engage with DOE and EPA only if there is specific tax legislation that impacts Digital Realty.",
+
+    policyNarrative: "Invariant will position Digital Realty's infrastructure as a linchpin of the public institutions and everyday services that communities depend on, highlighting its critical role in supporting hospital systems, emergency response networks, and other critical infrastructure. This narrative will be built and reinforced across all of Digital Realty's engagement in Washington, including in member and staff meetings, written materials, and public-facing communications.",
+
+    coalition: {
+      eventsIntro: "Beyond Digital Realty's involvement in the Data Center Coalition and NAREIT, we recommend Digital Realty build visibility through sponsorships and conference engagement, organized around two categories:",
+      taxPolicyEvents: [
+        "The Tax Council Policy Institute's Annual Tax Policy & Practice Symposium",
+        "Real Estate Roundtable's (RER's) State of the Industry Meeting"
+      ],
+      politicalEvents: [
+        "Congressional Black Caucus Foundation's Annual Legislative Conference (ALC)",
+        "National Republican Congressional Committee (NRCC) and National Republican Senatorial Committee (NRSC) events throughout the year",
+        "Democratic Congressional Campaign Committee (DCCC) and Democratic Senatorial Campaign Committee (DSCC) events throughout the year"
+      ],
+      politicalGiving: "Political giving will help build long-term relationships with the members and offices most relevant to Digital Realty's priorities. When the time comes, Invariant can help support a political giving strategy, whether through personal giving by executives or by building a corporate PAC."
+    },
+
+    flyIn: "As the first concrete step in this engagement, Digital Realty's Washington fly-in will take place during the week of September 14 or the week of September 21. Invariant will facilitate targeted and relevant meetings with offices to establish relationships with the members and staff most relevant to Digital Realty's tax priorities. As part of preparation for the fly-in, Invariant will work with Digital Realty to further define our tax priorities, policy narrative, and prep materials.",
+
     keyDates: [
-      // { label: "DC fly-in", date: "Early September 2026" }
+      { label: "Washington Fly-In", date: "Week of Sept. 14 or Sept. 21, 2026" }
     ]
   }
 
@@ -708,10 +910,10 @@ function renderMeetings() {
     <tr>
       <td class="date-cell">${esc(formatDate(m.date))}</td>
       <td>${esc(m.office)}</td>
-      <td>${esc(m.attendeesINV)}</td>
-      <td>${esc(m.attendeesDR)}</td>
-      <td>${esc(m.topic)}</td>
-      <td>${esc(m.followUp)}</td>
+      <td>${esc(m.chamber)}</td>
+      <td>${esc(m.party)}</td>
+      <td>${esc(m.staff)}</td>
+      <td>${esc(m.emails)}</td>
     </tr>
   `).join("");
 }
@@ -752,20 +954,96 @@ function renderStrategy() {
   const s = DASHBOARD_DATA.strategy || {};
   const blocks = [];
 
-  if (s.overview) {
+  if (s.executiveSummary) {
     blocks.push(`
       <div class="strategy-block">
-        <h3>Overview</h3>
-        <p>${esc(s.overview)}</p>
+        <h3>Executive Summary</h3>
+        <p>${esc(s.executiveSummary)}</p>
+        ${s.workstreams && s.workstreams.length ? `
+          <ol class="workstream-list">
+            ${s.workstreams.map(w => `<li>${esc(w)}</li>`).join("")}
+          </ol>
+        ` : ""}
       </div>
     `);
   }
 
-  if (s.priorities && s.priorities.length) {
+  if (s.policyLandscape && s.policyLandscape.length) {
+    const paragraphs = Array.isArray(s.policyLandscape) ? s.policyLandscape : [s.policyLandscape];
     blocks.push(`
       <div class="strategy-block">
-        <h3>Priorities</h3>
-        <ul>${s.priorities.map(p => `<li>${esc(p)}</li>`).join("")}</ul>
+        <h3>Policy Landscape</h3>
+        ${paragraphs.map(p => `<p>${esc(p)}</p>`).join("")}
+      </div>
+    `);
+  }
+
+  if (s.engagementIntro || (s.engagementTargets && s.engagementTargets.length)) {
+    blocks.push(`
+      <div class="strategy-block">
+        <h3>Congressional and Administration Engagement</h3>
+        ${s.engagementIntro ? `<p>${esc(s.engagementIntro)}</p>` : ""}
+        ${s.engagementCategories && s.engagementCategories.length ? `
+          <div class="category-grid">
+            ${s.engagementCategories.map(c => `
+              <div class="category-card">
+                <div class="category-name">${esc(c.name)}</div>
+                <p>${esc(c.description)}</p>
+              </div>
+            `).join("")}
+          </div>
+        ` : ""}
+        ${s.engagementTargets && s.engagementTargets.length ? `
+          <div class="target-grid">
+            ${s.engagementTargets.map(t => `
+              <div class="target-card">
+                <div class="target-group">${esc(t.group)}</div>
+                <ul>${t.people.map(p => `<li>${esc(p)}</li>`).join("")}</ul>
+              </div>
+            `).join("")}
+          </div>
+        ` : ""}
+        ${s.engagementNote ? `<p class="strategy-note">${esc(s.engagementNote)}</p>` : ""}
+      </div>
+    `);
+  }
+
+  if (s.policyNarrative) {
+    blocks.push(`
+      <div class="strategy-block">
+        <h3>The Policy Narrative</h3>
+        <p>${esc(s.policyNarrative)}</p>
+      </div>
+    `);
+  }
+
+  if (s.coalition && (s.coalition.eventsIntro || s.coalition.politicalGiving)) {
+    const c = s.coalition;
+    blocks.push(`
+      <div class="strategy-block">
+        <h3>Coalition and Political Giving Strategy</h3>
+        ${c.eventsIntro ? `<p>${esc(c.eventsIntro)}</p>` : ""}
+        ${c.taxPolicyEvents && c.taxPolicyEvents.length ? `
+          <div class="strategy-subhead">Tax Policy Events</div>
+          <ul>${c.taxPolicyEvents.map(e => `<li>${esc(e)}</li>`).join("")}</ul>
+        ` : ""}
+        ${c.politicalEvents && c.politicalEvents.length ? `
+          <div class="strategy-subhead">Political Events</div>
+          <ul>${c.politicalEvents.map(e => `<li>${esc(e)}</li>`).join("")}</ul>
+        ` : ""}
+        ${c.politicalGiving ? `
+          <div class="strategy-subhead">Political Giving</div>
+          <p>${esc(c.politicalGiving)}</p>
+        ` : ""}
+      </div>
+    `);
+  }
+
+  if (s.flyIn) {
+    blocks.push(`
+      <div class="strategy-block">
+        <h3>September Fly-In</h3>
+        <p>${esc(s.flyIn)}</p>
       </div>
     `);
   }
@@ -821,11 +1099,10 @@ function initTabs() {
 
 // ---------- Init ----------
 
-document.getElementById("last-updated").textContent = DASHBOARD_DATA.lastUpdated || "";
-renderLegislationStats();
-renderLegislation();
 renderMeetingsStats();
 renderMeetings();
+renderLegislationStats();
+renderLegislation();
 renderContacts();
 renderStrategy();
 initTabs();
