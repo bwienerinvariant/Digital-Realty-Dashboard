@@ -246,6 +246,28 @@ body {
 .status-floor { color: var(--status-floor); background: var(--status-floor-bg); }
 .status-enacted { color: var(--status-enacted); background: var(--status-enacted-bg); }
 .status-stalled { color: var(--status-stalled); background: var(--status-stalled-bg); }
+.status-doctype { color: var(--slate); background: var(--card-alt); border: 1px solid var(--rule); }
+
+.subsection-head {
+  margin: 32px 0 16px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+}
+
+.subsection-head h3 {
+  font-size: 16px;
+  font-weight: 800;
+  margin: 0 0 4px;
+  color: var(--navy);
+}
+
+.policy-card { border-left: 3px solid var(--slate); }
+.policy-card .bill-meta a {
+  color: var(--red);
+  text-decoration: none;
+  font-weight: 600;
+}
+.policy-card .bill-meta a:hover { text-decoration: underline; }
 
 .bill-summary { font-size: 14px; margin: 10px 0; color: var(--ink); }
 
@@ -558,6 +580,12 @@ body {
     </div>
     <div id="legislation-stats" class="stats-row"></div>
     <div id="legislation-list" class="stack"></div>
+
+    <div class="subsection-head">
+      <h3>Policy Developments</h3>
+      <p class="panel-desc">White papers, discussion drafts, and other proposals that signal future legislative direction but are not yet introduced as bills.</p>
+    </div>
+    <div id="policy-list" class="stack"></div>
   </section>
 
   <!-- STRATEGY -->
@@ -617,7 +645,36 @@ const DASHBOARD_DATA = {
       chamber: "Senate",
       summary: "Would exempt AI data centers from bonus depreciation and require data center operators to disclose information relating to their electricity and water use.",
       lastAction: "Read twice and referred to the Senate Committee on Finance",
-      lastActionDate: "July 21, 2026"
+      lastActionDate: "July 21, 2026",
+      link: "https://www.warner.senate.gov/wp-content/uploads/2026/07/BAG26E21.pdf"
+    },
+    {
+      bill: "H. Res. 1471",
+      title: "Data Center Bill of Rights",
+      sponsor: "Rep. Ro Khanna (D-CA)",
+      status: "introduced",
+      chamber: "House",
+      summary: "A House resolution asserting that communities affected by AI data center construction should have rights including local authority to ban or reject data centers, buffer zones near homes and schools, pre-approval impact reports, water use disclosures, and a requirement that data center owners and operators pay their fair share of state and local taxes, with transparency and clawback provisions attached to any tax exemption or subsidy.",
+      lastAction: "Referred to the House Committees on Energy and Commerce and the Judiciary",
+      lastActionDate: "August 6, 2026",
+      link: "https://khanna.house.gov/sites/evo-subsites/khanna-evo.house.gov/files/evo-media-document/data-center-bill-of-rights-res.pdf"
+    }
+  ],
+
+  /* ----------------------------------------------------------
+     1b. POLICY DEVELOPMENTS
+     White papers, discussion drafts, agency proposals, and other
+     items that are not introduced bills but signal future
+     legislative direction.
+  ---------------------------------------------------------- */
+  policyDevelopments: [
+    {
+      docType: "White Paper",
+      title: "Proposal for the Taxation of Data Centers",
+      source: "Senate Finance Committee Democratic Staff (Ranking Member Ron Wyden, D-OR)",
+      date: "August 6, 2026",
+      summary: "Proposes two new revenue sources from data centers: (1) removing existing tax incentives, including Opportunity Zone eligibility, 100% bonus depreciation, and REIT-favorable tax treatment for rents paid to REITs by new data centers, and (2) a new Data Center Public Investment excise tax, a gross receipts tax on data center operators at a low single-digit rate. Comments are due August 31, 2026, with discussion draft legislative language expected in the fall.",
+      link: "https://www.finance.senate.gov/download/080626-wyden-data-center-tax-white-paper"
     }
   ],
 
@@ -868,6 +925,33 @@ function renderLegislation() {
       ${bill.lastAction ? `
         <div class="bill-meta">${esc(bill.lastAction)}${bill.lastActionDate ? " &middot; " + esc(bill.lastActionDate) : ""}</div>
       ` : ""}
+      ${bill.link ? `<div class="bill-meta"><a href="${esc(bill.link)}" target="_blank" rel="noopener">View full text</a></div>` : ""}
+    </div>
+  `).join("");
+}
+
+// ---------- Policy Developments ----------
+
+function renderPolicyDevelopments() {
+  const container = document.getElementById("policy-list");
+  const items = DASHBOARD_DATA.policyDevelopments || [];
+
+  if (items.length === 0) {
+    container.innerHTML = '<p class="empty-state">No policy developments currently tracked.</p>';
+    return;
+  }
+
+  container.innerHTML = items.map(doc => `
+    <div class="bill-card policy-card">
+      <div class="bill-card-top">
+        <div>
+          <div class="bill-number">${esc(doc.source)}${doc.date ? " &middot; " + esc(doc.date) : ""}</div>
+          <h3 class="bill-title">${esc(doc.title)}</h3>
+        </div>
+        <span class="status-badge status-doctype">${esc(doc.docType)}</span>
+      </div>
+      ${doc.summary ? `<p class="bill-summary">${esc(doc.summary)}</p>` : ""}
+      ${doc.link ? `<div class="bill-meta"><a href="${esc(doc.link)}" target="_blank" rel="noopener">View full document</a></div>` : ""}
     </div>
   `).join("");
 }
@@ -1103,6 +1187,7 @@ renderMeetingsStats();
 renderMeetings();
 renderLegislationStats();
 renderLegislation();
+renderPolicyDevelopments();
 renderContacts();
 renderStrategy();
 initTabs();
