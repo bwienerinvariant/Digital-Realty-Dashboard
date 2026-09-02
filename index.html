@@ -169,6 +169,31 @@ body {
   grid-template-columns: minmax(140px, 220px);
 }
 
+.meetings-banner {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--red);
+  padding: 10px 20px;
+  margin-bottom: 20px;
+}
+
+.meetings-banner-label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+
+.meetings-banner-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
 .stat-card {
   background: var(--card);
   padding: 16px 20px;
@@ -559,7 +584,7 @@ body {
       <h2>Meeting Tracker</h2>
       <p class="panel-desc">Government meetings held on behalf of Digital Realty.</p>
     </div>
-    <div id="meetings-stats" class="stats-row"></div>
+    <div id="meetings-banner" class="meetings-banner"></div>
     <div class="table-wrap">
       <table class="data-table">
         <thead>
@@ -725,9 +750,9 @@ const DASHBOARD_DATA = {
     },
     {
       date: "2026-09-22",
-      office: "Senate Finance Committee Staff (REIT Data Centers)",
+      office: "Finance Committee (Majority Staff)",
       chamber: "Senate",
-      party: "",
+      party: "R",
       staff: "Michael Gould, Eric Oman",
       emails: "Michael_Gould@finance.senate.gov, Eric_Oman@finance.senate.gov"
     },
@@ -1038,15 +1063,11 @@ function renderPolicyDevelopments() {
 // ---------- Meetings ----------
 
 function renderMeetingsStats() {
-  const container = document.getElementById("meetings-stats");
   const items = DASHBOARD_DATA.meetings || [];
-
-  container.className = "stats-row stats-row-single";
-  container.innerHTML = `
-    <div class="stat-card">
-      <div class="stat-label">Total Meetings</div>
-      <div class="stat-value">${items.length}</div>
-    </div>
+  const banner = document.getElementById("meetings-banner");
+  banner.innerHTML = `
+    <span class="meetings-banner-label">Total Meetings</span>
+    <span class="meetings-banner-value">${items.length}</span>
   `;
 }
 
