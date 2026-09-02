@@ -164,6 +164,11 @@ body {
   margin-bottom: 20px;
 }
 
+.stats-row.stats-row-single {
+  display: inline-grid;
+  grid-template-columns: minmax(140px, 220px);
+}
+
 .stat-card {
   background: var(--card);
   padding: 16px 20px;
@@ -694,15 +699,78 @@ const DASHBOARD_DATA = {
      Add new meetings to the TOP of the list (most recent first)
   ---------------------------------------------------------- */
   meetings: [
-    // Add meetings here as they happen, most recent first. Example:
-    // {
-    //   date: "2026-07-15",
-    //   office: "Office of Sen. Mark Warner",
-    //   chamber: "Senate",
-    //   party: "D",
-    //   staff: "Jane Doe, Legislative Assistant",
-    //   emails: "jane.doe@warner.senate.gov"
-    // }
+    {
+      date: "2026-09-23",
+      office: "Office of Rep. Hakeem Jeffries (D-NY)",
+      chamber: "House",
+      party: "D",
+      staff: "Vernon Baker",
+      emails: "Vernon.Baker@mail.house.gov"
+    },
+    {
+      date: "2026-09-23",
+      office: "Office of Rep. Katherine Clark (D-MA)",
+      chamber: "House",
+      party: "D",
+      staff: "Taylor Smith",
+      emails: "Taylor.Smith@mail.house.gov"
+    },
+    {
+      date: "2026-09-22",
+      office: "House Ways and Means Committee (Majority Staff)",
+      chamber: "House",
+      party: "R",
+      staff: "Larry Pounders, Scott Greenberg, Nicholas O'Boyle",
+      emails: "Larry.Pounders@mail.house.gov, Scott.Greenberg@mail.house.gov, Nicholas.OBoyle1@mail.house.gov"
+    },
+    {
+      date: "2026-09-22",
+      office: "Senate Finance Committee Staff (REIT Data Centers)",
+      chamber: "Senate",
+      party: "",
+      staff: "Michael Gould, Eric Oman",
+      emails: "Michael_Gould@finance.senate.gov, Eric_Oman@finance.senate.gov"
+    },
+    {
+      date: "2026-09-22",
+      office: "Office of Sen. John Thune (R-SD)",
+      chamber: "Senate",
+      party: "R",
+      staff: "Flynn Marron",
+      emails: "Flynn_Marron@thune.senate.gov"
+    },
+    {
+      date: "2026-09-22",
+      office: "House Ways and Means Committee (Minority Staff)",
+      chamber: "House",
+      party: "D",
+      staff: "Beverly Weshnak, JI Prichard",
+      emails: "Beverly.Weshnak@mail.house.gov, ji.prichard@mail.house.gov"
+    },
+    {
+      date: "2026-09-22",
+      office: "Office of Sen. Chuck Schumer (D-NY)",
+      chamber: "Senate",
+      party: "D",
+      staff: "Bobby Andres, William Gormley",
+      emails: "Bobby_Andres@schumer.senate.gov, William_Gormley@schumer.senate.gov"
+    },
+    {
+      date: "2026-09-22",
+      office: "Office of Sen. Todd Young (R-IN)",
+      chamber: "Senate",
+      party: "R",
+      staff: "Drew Weinstock, Alex Kukura",
+      emails: "Drew_Weinstock@young.senate.gov, Alex_Kukura@young.senate.gov"
+    },
+    {
+      date: "2026-09-21",
+      office: "Office of Sen. Mark Warner (D-VA)",
+      chamber: "Senate",
+      party: "D",
+      staff: "Spencer Gilbert, Taylor Durbin",
+      emails: "Spencer_Gilbert@warner.senate.gov, Taylor_Durbin@warner.senate.gov"
+    }
   ],
 
   /* ----------------------------------------------------------
@@ -972,22 +1040,12 @@ function renderPolicyDevelopments() {
 function renderMeetingsStats() {
   const container = document.getElementById("meetings-stats");
   const items = DASHBOARD_DATA.meetings || [];
-  const thisYear = new Date().getFullYear();
-  const ytd = items.filter(m => new Date(m.date + "T00:00:00").getFullYear() === thisYear).length;
-  const uniqueOffices = new Set(items.map(m => m.office)).size;
 
+  container.className = "stats-row stats-row-single";
   container.innerHTML = `
     <div class="stat-card">
       <div class="stat-label">Total Meetings</div>
       <div class="stat-value">${items.length}</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">YTD ${thisYear}</div>
-      <div class="stat-value">${ytd}</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Offices Engaged</div>
-      <div class="stat-value stat-red">${uniqueOffices}</div>
     </div>
   `;
 }
